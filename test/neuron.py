@@ -18,7 +18,6 @@ class Neuron:
   def feedforward(self, inputs):
     # 加权输入，加入偏置，然后使用激活函数
     total = np.dot(self.weights, inputs) + self.bias # dot点乘，2*0+1*3+4
-    print('total',total)
     return sigmoid(total)
 
 weights = np.array([0, 1]) # w1 = 0, w2 = 1

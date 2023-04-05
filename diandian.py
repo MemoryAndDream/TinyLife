@@ -129,7 +129,6 @@ def reload(): # 从老样本载入作为父本继续突变
     for root, dirs, files in os.walk(load_path):
         for file in files:
             path = os.path.join(root, file)
-            print(path)
             diandian = DianDian()
             diandian.born()
             diandian.inherit(path)

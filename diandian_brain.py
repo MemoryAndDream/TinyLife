@@ -78,7 +78,7 @@ class DianDianBrain:
 
    # 权重暂时定为[-100,100]间的随机数
 
-  def mutate2(self): #小突变
+  def mutate2(self, mutate_rate = 5): #小突变
     # h_value = random.choice([self.h1.weights,self.h2.weights ,self.h3.weights ,self.h4.weights ,self.h5.weights ,self.h6.weights ,self.h7.weights ,self.h8.weights])
 
     # h_value[random.choice(range(8))]  += random.choice([1,-1])  # 不知道这么搞好还是随机好？要避免陷入局部最小 所以先随机瞎j8突变
@@ -86,15 +86,14 @@ class DianDianBrain:
      self.h7.weights, self.h8.weights, self.o1.weights,self.o2.weights,self.o3.weights,self.o4.weights]
     for weight in weights:
       for i in range(self.input_count):
-        weight[i] = weight[i] + random.randint(-10,10)
+        weight[i] = weight[i] + random.randint(-mutate_rate,mutate_rate)
 
   def save(self, name, age, grave_path=None):
     if not grave_path:
       grave_path = 'data/grave/%s'%datetime.datetime.now().strftime('%Y%m%d%H')
     if not os.path.exists(grave_path):
       os.mkdir(grave_path)
-    file_path = grave_path+'/'+ name+'.npz'
-    print(name, 'die at: ', age)
+    file_path = grave_path+'/'+ name+str(age) +'.npz'
     weights = [self.h1.weights, self.h2.weights, self.h3.weights, self.h4.weights, self.h5.weights, self.h6.weights,
      self.h7.weights, self.h8.weights, self.o1.weights,self.o2.weights,self.o3.weights,self.o4.weights]
     np.savez(file_path, weights)

@@ -100,8 +100,8 @@ class DianDian:
             self.alive = False
             # self.funeral()
 
-    def funeral(self):  # 送走
-        self.mind.save(self.name, self.age)
+    def funeral(self, save_path=None):  # 送走
+        self.mind.save(self.name, self.age, save_path)
 
 
 def main():

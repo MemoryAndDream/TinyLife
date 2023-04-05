@@ -88,8 +88,9 @@ class DianDianBrain:
       for i in range(self.input_count):
         weight[i] = weight[i] + random.randint(-10,10)
 
-  def save(self, name, age):
-    grave_path = 'data/grave/%s'%datetime.datetime.now().strftime('%Y%m%d%H')
+  def save(self, name, age, grave_path=None):
+    if not grave_path:
+      grave_path = 'data/grave/%s'%datetime.datetime.now().strftime('%Y%m%d%H')
     if not os.path.exists(grave_path):
       os.mkdir(grave_path)
     file_path = grave_path+'/'+ name+'.npz'

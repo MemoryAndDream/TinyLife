@@ -14,9 +14,8 @@ class DianDian:
     def __init__(self):
         pass
 
-    def born(self):
-        w, h = 1000, 1000
-        self.env = Environment(w, h)
+    def born(self, w=1000, h=1000, food_rate=0.1):
+        self.env = Environment(w, h, food_rate)
         self.x, self.y = random.randint(0, w - 1), random.randint(0, h - 1)
         self.hunger = 100  # 饥饿值
         self.age = 0  # 年龄 到1000生成10后代
@@ -82,16 +81,19 @@ class DianDian:
 
     def eat(self):
         x, y = self.x, self.y
-        if self.env.env[x, y] == 1:
-            # print('吃到了')
+        if self.env.env[x, y] >= 10:
+            self.env.smell_disappear(x, y)
+            self.hunger += self.env.env[x, y]
             self.env.env[x, y] = 0
-            self.hunger += 10
+            # self.env.show()
+
 
     def grow(self):
         self.age += 1
         # self.show_status()
 
-    def live(self, time):
+    def live(self):
+        self.env.refresh()
         self.hunger -= 1
         self.move()
         self.eat()
@@ -145,5 +147,5 @@ def reload(): # 从老样本载入作为父本继续突变
     print(float(sum(ages)) / len(ages))
 
 if __name__ == '__main__':
-    # main()
-    reload()
+    main()
+    # reload()

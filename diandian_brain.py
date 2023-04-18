@@ -13,7 +13,7 @@ def sigmoid(x): # 激活函数加入非线性因素
   return 1 / (1 + np.exp(-x))
 
 def get_bool(x):
-  return x>=0.5
+  return x>=0.5 # 等于条件在input全为0时生效
 
 class Neuron:
   def __init__(self, weights, bias):
@@ -66,7 +66,7 @@ class DianDianBrain:
     out_o4 = self.o4.feedforward(input_h)
     return get_bool(out_o1),get_bool(out_o2),get_bool(out_o3),get_bool(out_o4)
 
-  def mutate(self): #突变
+  def mutate(self): #随机突变
     # h_value = random.choice([self.h1.weights,self.h2.weights ,self.h3.weights ,self.h4.weights ,self.h5.weights ,self.h6.weights ,self.h7.weights ,self.h8.weights])
 
     # h_value[random.choice(range(8))]  += random.choice([1,-1])  # 不知道这么搞好还是随机好？要避免陷入局部最小 所以先随机瞎j8突变
@@ -74,11 +74,11 @@ class DianDianBrain:
      self.h7.weights, self.h8.weights, self.o1.weights,self.o2.weights,self.o3.weights,self.o4.weights]
     for weight in weights:
       for i in range(self.input_count):
-        weight[i] = random.randint(-100,100)
+        weight[i] = random.randint(-1000,1000)
 
    # 权重暂时定为[-100,100]间的随机数
 
-  def mutate2(self, mutate_rate = 5): #小突变
+  def mutate2(self, mutate_rate = 5): #遗传突变
     # h_value = random.choice([self.h1.weights,self.h2.weights ,self.h3.weights ,self.h4.weights ,self.h5.weights ,self.h6.weights ,self.h7.weights ,self.h8.weights])
 
     # h_value[random.choice(range(8))]  += random.choice([1,-1])  # 不知道这么搞好还是随机好？要避免陷入局部最小 所以先随机瞎j8突变
@@ -87,6 +87,24 @@ class DianDianBrain:
     for weight in weights:
       for i in range(self.input_count):
         weight[i] = weight[i] + random.randint(-mutate_rate,mutate_rate)
+
+  def mutate3(self): #遗传突变
+    # h_value = random.choice([self.h1.weights,self.h2.weights ,self.h3.weights ,self.h4.weights ,self.h5.weights ,self.h6.weights ,self.h7.weights ,self.h8.weights])
+
+    # h_value[random.choice(range(8))]  += random.choice([1,-1])  # 不知道这么搞好还是随机好？要避免陷入局部最小 所以先随机瞎j8突变
+    weights = [self.h1.weights, self.h2.weights, self.h3.weights, self.h4.weights, self.h5.weights, self.h6.weights,
+     self.h7.weights, self.h8.weights, self.o1.weights,self.o2.weights,self.o3.weights,self.o4.weights]
+    for weight in weights:
+      for i in range(self.input_count):
+        weight[i] = weight[i]*random.uniform(0.8,1.2)
+
+
+  def mutate4(self): #随机突变
+    weights = [self.h1.weights, self.h2.weights, self.h3.weights, self.h4.weights, self.h5.weights, self.h6.weights,
+     self.h7.weights, self.h8.weights, self.o1.weights,self.o2.weights,self.o3.weights,self.o4.weights]
+    for weight in weights:
+      for i in range(self.input_count):
+        weight[i] = random.choice([-10,-1,0,1,10])
 
   def save(self, name, age, grave_path=None):
     if not grave_path:
@@ -104,6 +122,10 @@ class DianDianBrain:
       self.h1.weights, self.h2.weights, self.h3.weights, self.h4.weights, self.h5.weights, self.h6.weights,\
       self.h7.weights, self.h8.weights, self.o1.weights, self.o2.weights, self.o3.weights, self.o4.weights =f['arr_0']
 
+
+  def show(self):
+    print(self.h1.weights, self.h2.weights, self.h3.weights, self.h4.weights, self.h5.weights, self.h6.weights,\
+      self.h7.weights, self.h8.weights, self.o1.weights, self.o2.weights, self.o3.weights, self.o4.weights)
 
 
 if __name__ == '__main__':

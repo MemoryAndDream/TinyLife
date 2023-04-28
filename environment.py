@@ -7,17 +7,25 @@ import numpy as np
 import random
 from food import Food
 class Environment:
-    def __init__(self, width, height, food_rate=0.01):
+    def __init__(self, width, height, food_rate=0.01): #左上角视为0,0！与pygame一致
         self.width = width
         self.height = height
         self.env = np.zeros((width, height),dtype=float) # 有食物的是1，没有的是0 dtype是int就不能扩散了！！
         self.foods = []
         self.food_rate = food_rate # 需要优化成平均多少有一个食物
 
+    def get(self,x,y): # 获取env值，处理边界条件
+        if self.in_boundary(x,y):
+            return self.env[x,y]
+        else:
+            return 0
 
 
-    def loop(self, x, y):  # 测试地图有限，所以先循环一下 -1:999
-        return x % self.width, y % self.height
+    def in_boundary(self,x,y):
+        if x>=0 and  y>=0 and x<self.width and y<self.height:
+            return True
+        else:
+            return False
 
 
     def refresh(self):
@@ -38,34 +46,24 @@ class Environment:
         foods = self.foods
         for food in foods:
            self.env[food.x,food.y] = 10
-           self.smell_spread(food.x,food.y)
 
     def gen_food(self):  # 随机生成食物 位置重叠就累加
         x, y = random.randint(0, self.width - 1), random.randint(0, self.width - 1)
         new_food = Food(x, y)
         self.foods.append(new_food)
         self.env[x, y] += 10
-        self.smell_spread(x, y)
 
 
-    def smell_spread(self,x,y):
-        # 扩散浓度1/(r*r) 先只计算3格范围试试
-        for w in range(-3,4):
-            for h in range(-3, 4):
-                if not w and not h:
-                    continue
-                loc_x,loc_y = self.loop(x+w,y+h)
-                if self.env[loc_x, loc_y] < 10:
-                    self.env[loc_x, loc_y] += 1/(w*w+h*h)
-
-    def smell_disappear(self,x,y):
-        for w in range(-3,4):
-            for h in range(-3, 4):
-                if not w and not h:
-                    continue
-                loc_x,loc_y = self.loop(x+w,y+h)
-                if self.env[loc_x, loc_y] < 10:
-                    self.env[loc_x, loc_y] -= 1/(w*w+h*h)
+    def cal_sight(self,eye_x, eye_y, food_x, food_y,dirt ): # 计算眼睛看到的光亮  角度* r * r 眼睛先用180度计算
+        x = abs(food_x-eye_x)
+        y = abs(food_y-eye_y)
+        r2 = x * x + y * y
+        r = r2** 0.5
+        if dirt in [0,2]:#上下朝向
+            theta = x/r
+        else:
+            theta = y/r
+        return 100*theta/r2 # 不乘10视力太差了
 
 
 

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Description :
-date：          2023/4/5
+
 """
-from diandian import DianDian
+from xiaoyu import XiaoYu
 import os
 import shutil
 
@@ -17,33 +16,33 @@ def mutate(): # 遗传优化
         return
 
 
-    aged_diandians = []
+    aged_xiaoyus = []
     ages = []
     competition_rate = 10 # how many childs for a parent make
     for i in range(competition_rate):
         for root, dirs, files in os.walk(load_path):
             for file in files:
                 path = os.path.join(root, file)
-                diandian = DianDian()
-                diandian.born(50,50, food_rate=0.25)
-                diandian.inherit(path)
-                diandian.mind.mutate3()
+                xiaoyu = XiaoYu()
+                xiaoyu.born(50,50, food_rate=0.25)
+                xiaoyu.inherit(path)
+                xiaoyu.mind.mutate3()
                 for t in range(2000):
-                    diandian.live()
-                    if not diandian.alive:
+                    xiaoyu.live()
+                    if not xiaoyu.alive:
                         break
-                aged_diandians.append(diandian)
-                ages.append(diandian.age)
+                aged_xiaoyus.append(xiaoyu)
+                ages.append(xiaoyu.age)
 
-    aged_diandians = sorted(
-        aged_diandians,
+    aged_xiaoyus = sorted(
+        aged_xiaoyus,
         key=lambda x:x.age,
     )
-    for aged_diandian in aged_diandians[-int(len(aged_diandians)/competition_rate):]:
-        aged_diandian.funeral(save_path=save_path)
+    for aged_xiaoyu in aged_xiaoyus[-int(len(aged_xiaoyus)/competition_rate):]:
+        aged_xiaoyu.funeral(save_path=save_path)
     # print(ages)
     print('本代平均寿命:')
-    average = sum(ages) / len(aged_diandians)
+    average = sum(ages) / len(aged_xiaoyus)
     print(average)
 
 
@@ -52,29 +51,30 @@ def random_mutate(): # 随机生成 1000个取最高
     save_path = 'data/grave/new'
     if not os.path.exists(save_path):
         os.mkdir (save_path)
-    aged_diandians = []
+    aged_xiaoyus = []
     ages = []
-    for i in range(3000):
-        diandian = DianDian()
-        diandian.born(50,50, food_rate=0.3)
-        diandian.mind.mutate4()
+    for i in range(1000):
+        xiaoyu = XiaoYu()
+        xiaoyu.born(50,50, food_rate=0.3)
+        xiaoyu.mind.mutate()
         for t in range(1000):
-            diandian.live()
-            if not diandian.alive:
+            xiaoyu.live()
+            if not xiaoyu.alive:
                 break
-        aged_diandians.append(diandian)
-        ages.append(diandian.age)
+        aged_xiaoyus.append(xiaoyu)
+        ages.append(xiaoyu.age)
 
-    aged_diandians = sorted(
-        aged_diandians,
+    aged_xiaoyus = sorted(
+        aged_xiaoyus,
         key=lambda x:x.age,
     )
-    aged_diandians[-1].funeral(save_path=save_path)
+    aged_xiaoyus[-1].funeral(save_path=save_path)
 
-    print('最高寿命：',aged_diandians[-1].age)
+    print('最高寿命：',aged_xiaoyus[-1].age)
 
 
 if __name__ == '__main__':
-    for i in range(200):
-        mutate()
+    random_mutate()
+    # for i in range(1):
+    #     random_mutate()
 
